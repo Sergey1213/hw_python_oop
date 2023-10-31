@@ -4,23 +4,19 @@ from typing import Any
 class InfoMessage ():
     """Информационное сообщение о тренировке."""
 
-    def __init__(self, training_type: str,
-                 duration: float,
-                 distance: float,
-                 speed: float,
-                 calories: float) -> None:
-        self.training_type = training_type
-        self.duration = duration
-        self.distance = distance
-        self.speed = speed
-        self.calories = calories
+    def __init__(self, training: Any) -> None:
+        self.training = training
 
     def get_message(self) -> str:  # TODO перевести в часы
-        return (f'Тип тренировки: {self.training_type}; '
-                f'Длительность: {self.duration:.3f} ч.; '
-                f'Дистанция: {self.distance:.3f} км; '
-                f'Ср. скорость: {self.speed:.3f} км/ч; '
-                f'Потрачено ккал: {self.calories:.3f}.')
+        distans: float = training.get_distance()
+        mean_speed: float = training.get_mean_speed()
+        spent_calories: float = training.get_spent_calories()
+
+        return (f'Тип тренировки: {training.__class__.__name__}; '
+                f'Длительность: {training.duration:.3f} ч.; '
+                f'Дистанция: {distans:.3f} км; '
+                f'Ср. скорость: {mean_speed:.3f} км/ч; '
+                f'Потрачено ккал: {spent_calories:.3f}.')
 
 
 class Training:
@@ -51,14 +47,9 @@ class Training:
         """Получить количество затраченных калорий."""
         pass
 
-    def show_training_info(self, distans_km, mean_speed) -> InfoMessage:
+    def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        distans_km = self.get_distance()
-        mean_speed = self.get_mean_speed()
-        spent_calories = self.get_spent_calories()
-        info_message = InfoMessage(
-            self.__class__.__name__, self.duration, distans_km, mean_speed, spent_calories)
-        # text_message = info_message.get_message()
+        info_message = InfoMessage(Training)
         return info_message
 
 
@@ -133,11 +124,7 @@ def read_package(workout_type: str, data: list) -> Training:
 
 def main(training: Training) -> None:
     """Главная функция."""
-    training_data_distance = training.get_distance()
-    training_data_speed = training.get_mean_speed()
-    # training_data_spent_calories = training.get_spent_calories()
-    info = training.show_training_info(
-        training_data_distance, training_data_speed)
+    info = training.show_training_info()
     print(info.get_message())
 
 
