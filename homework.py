@@ -106,9 +106,9 @@ class Swimming(Training):
 def read_package(workout_type: str, data: list[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
     data_status = check_correct_data(workout_type, data)
-    WORK_TYPE: dict[str, Any] = {'SWM': Swimming,
-                                 'RUN': Running,
-                                 'WLK': SportsWalking}
+    WORK_TYPE: dict[str, type[Training]] = {'SWM': Swimming,
+                                            'RUN': Running,
+                                            'WLK': SportsWalking}
     if data_status:
         return WORK_TYPE[workout_type](*data)
     else:
